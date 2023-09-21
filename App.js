@@ -1,34 +1,50 @@
 import { useState } from 'react'
-import { StyleSheet, Text, View, Button, TextInput } from 'react-native'
+import { StyleSheet, View, FlatList, Button } from 'react-native'
+
+import GoalItem from './components/GoalItem'
+import GoalInput from './components/GoalInput'
 
 export default function App() {
-  const [inputText, setInputText] = useState('')
   const [goals, setGoals] = useState([])
+  const [isModalVisible, setIsModalVisible] = useState(false)
 
-  const goalInputHandler = (text) => {
-    setInputText(text)
+  const startAddGoalHandler = () => {
+    setIsModalVisible(true)
   }
 
-  const addGoalHandler = () => {
-    setGoals((currentGoals) => [...currentGoals, inputText])
+  const addGoalHandler = (inputText) => {
+    setGoals((currentGoals) => [
+      ...currentGoals,
+      { text: inputText, id: Math.random().toString() },
+    ])
+  }
+
+  const deleteGoalHandler = (id) => {
+    setGoals((currentGoals) => currentGoals.filter((goal) => goal.id !== id))
   }
 
   return (
     <View style={styles.appContainer}>
-      <View style={styles.inputContainer}>
-        <TextInput
-          style={styles.textInput}
-          placeholder='Your course goal'
-          onChangeText={goalInputHandler}
-        />
-        <Button title='Add Goal' onPress={addGoalHandler} />
-      </View>
+      <Button
+        title='Add New Goal'
+        color='#5e0acc'
+        onPress={startAddGoalHandler}
+      />
+      <GoalInput onAddGoal={addGoalHandler} visible={isModalVisible} />
       <View style={styles.goalsContainer}>
-        <Text>
-          {goals.map((goal) => (
-            <Text key={goal}>{goal}</Text>
-          ))}
-        </Text>
+        <FlatList
+          data={goals}
+          renderItem={(itemData) => (
+            <GoalItem
+              text={itemData.item.text}
+              onDeleteItem={deleteGoalHandler}
+              id={itemData.item.id}
+            />
+          )}
+          keyExtractor={(item, index) => item.id}
+          alwaysBounceVertical={false}
+          automaticallyAdjustKeyboardInsets={true}
+        />
       </View>
     </View>
   )
@@ -40,23 +56,7 @@ const styles = StyleSheet.create({
     paddingTop: 50,
     paddingHorizontal: 16,
   },
-  inputContainer: {
-    flex: 1,
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    paddingBottom: 24,
-    borderBottomWidth: 1,
-    borderBottomColor: '#cccccc',
-  },
   goalsContainer: {
     flex: 5,
-  },
-  textInput: {
-    width: '70%',
-    borderWidth: 1,
-    borderColor: '#cccccc',
-    marginRight: 8,
-    padding: 8,
   },
 })
