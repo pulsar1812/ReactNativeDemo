@@ -13,6 +13,8 @@ export default function GoalInput({ onAddGoal, visible, onCancel }) {
     setInputText('')
   }
 
+  console.log('GoalInput')
+
   return (
     <Modal visible={visible} animationType='slide'>
       <View style={styles.inputContainer}>
@@ -28,7 +30,7 @@ export default function GoalInput({ onAddGoal, visible, onCancel }) {
         />
         <View style={styles.buttonContainer}>
           <View style={styles.button}>
-            <Button title='Add Goal' onPress={addGoalHandler} color='#b180f0' />
+            <Button title='Add Goal' onPress={addGoalHandler} color='#2063d7' />
           </View>
           <View style={styles.button}>
             <Button title='Cancel' onPress={onCancel} color='#f31282' />
@@ -44,7 +46,7 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: '#311b6b',
+    backgroundColor: '#eea927',
     padding: 16,
   },
   image: {
